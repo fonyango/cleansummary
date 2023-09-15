@@ -56,7 +56,7 @@ cs.get_statistical_summary(variableType='numerical')
 ```
 ## Contributing
 
-If you would like to contribute to this project, please follow these steps:
+Let's make it better! If you would like to contribute to this project, please follow these steps:
 
 - Fork the repository on GitHub.
 
