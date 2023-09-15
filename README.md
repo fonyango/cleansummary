@@ -10,38 +10,57 @@ This is a simple package for exploring pandas dataframe to get the initial stati
 
 - [Installation](#installation)
 - [Usage](#usage)
-- [Documentation](#documentation)
 - [Contributing](#contributing)
 - [License](#license)
 
-
-## Getting Started
-
-Installation
+## Installation
 
 `pip install cleansummary`
 
+Or install from source
+
+```
+git clone https://github.com/yourusername/your-package-name.git
+cd your-package-name
+pip install .
+```
+
+## Usage
 
 ```
 from cleansummary import CleanSummary
+
 cs = CleanSummary(df)
-```
 
-### Get proportion of missing data 
+# get proportion of missing data 
 
-`cs.percentage_missing()`
+cs.percentage_missing()
 
+# get the plot and skewness coefficient of a variable
+cs.check_skewness('variable_name')`
 
-### Get the plot and skewness coefficient of a variable
-`cs.check_skewness('variable_name')`
+# get statistical summary
 
-
-### Get statistical summary
-
-```
 cs.get_statistical_summary(variableType=None)
 
 cs.get_statistical_summary(variableType='categorical')
 
 cs.get_statistical_summary(variableType='numerical')
 ```
+## Contributing
+
+We welcome contributions from the community. If you would like to contribute to this project, please follow these steps:
+
+Fork the repository on GitHub.
+Clone the forked repository to your local machine.
+Create a new branch for your feature or bug fix: git checkout -b feature-name
+Make your changes and commit them with descriptive commit messages.
+Push your changes to your fork on GitHub: git push origin feature-name
+Create a pull request from your forked repository to this repository.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/fonyango/cleansummary/blob/master/license.txt) file for details.
+
+
+
