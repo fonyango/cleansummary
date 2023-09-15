@@ -1,4 +1,18 @@
+# cleansummary
+
+[![GitHub License](https://img.shields.io/github/license/fonyango/cleansummary)](https://github.com/fonyango/cleansummary/blob/master/LICENSE)
+[![PyPI Version](https://img.shields.io/pypi/v/cleansummary)](https://pypi.org/project/cleansummary/)
+[![Python Versions](https://img.shields.io/pypi/pyversions/cleansummary)](https://pypi.org/project/cleansummary/)
+
 This is a simple package for exploring pandas dataframe to get the initial statistical summary.
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
+- [License](#license)
 
 
 ## Getting Started
