@@ -29,21 +29,26 @@ pip install .
 
 ## Usage
 
+Import the library
+
+`from cleansummary import CleanSummary`
+
+Instantiate the library using a dataframe
+
+`cs = CleanSummary(df)`
+
+Get proportion of missing data 
+
+`cs.percentage_missing()`
+
+Get the plot and skewness coefficient of a variable
+
+`cs.check_skewness('variable_name')`
+
+Get statistical summary
+
 ```
-from cleansummary import CleanSummary
-
-cs = CleanSummary(df)
-
-# get proportion of missing data 
-
-cs.percentage_missing()
-
-# get the plot and skewness coefficient of a variable
-cs.check_skewness('variable_name')`
-
-# get statistical summary
-
-`cs.get_statistical_summary(variableType=None)`
+cs.get_statistical_summary(variableType=None)
 
 cs.get_statistical_summary(variableType='categorical')
 
