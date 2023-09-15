@@ -1,20 +1,3 @@
-Metadata-Version: 2.1
-Name: cleansummary
-Version: 0.0.4
-Summary: A simple package to get statistical summary of a pandas dataframe
-Home-page: UNKNOWN
-Author: Francis W. Onyango
-Author-email: fonyango.w@gmail.com
-License: MIT
-Keywords: cleansummary
-Platform: UNKNOWN
-Classifier: Development Status :: 4 - Beta
-Classifier: Intended Audience :: Developers
-Classifier: Operating System :: OS Independent
-Classifier: License :: OSI Approved :: MIT License
-Classifier: Programming Language :: Python :: 3
-Description-Content-Type: text/markdown
-
 ## Get Started
 
 Source code: [GitHub Repository](https://github.com/fonyango/cleansummary.git)
@@ -60,10 +43,3 @@ cs.get_statistical_summary(variableType='categorical')
 
 cs.get_statistical_summary(variableType='numerical')
 ```
-
-Change Log
-====================
-
-0.0.4 (15/09/2023)
-
-

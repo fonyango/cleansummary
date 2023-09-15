@@ -19,13 +19,14 @@ class CleanSummary():
         
         """Get summary of missing values in the data
         """
-        missing = pd.DataFrame(self.data.isnull().sum().reset_index().values, columns=['variable','missing'])
+        missing = pd.DataFrame(self.data.isnull().sum().reset_index().values, 
+                               columns=['variable','missing'])
         missing['%_missing'] = missing['missing']/len(self.data) * 100
         d_types = pd.DataFrame(self.data.dtypes).reset_index()
         d_types.columns = ['variable', 'dtype']
-        missing = missing.merge(d_types, on='variable')
+        result = missing.merge(d_types, on='variable')
 
-        return missing
+        return result
 
 
     def check_skewness(self, variable):

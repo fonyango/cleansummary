@@ -1,3 +1,5 @@
+CHANGELOG.md
+Guide.md
 MANIFEST.in
 README.md
 license.txt

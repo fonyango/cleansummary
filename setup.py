@@ -10,9 +10,9 @@ classifiers = [
  
 setup(
   name='cleansummary',
-  version='0.0.3',
+  version='0.0.4',
   description='A simple package to get statistical summary of a pandas dataframe',
-  long_description=open('README.md').read() + '\n\n' + open('CHANGELOG.md').read(),
+  long_description=open('Guide.md').read() + '\n\n' + open('CHANGELOG.md').read(),
     long_description_content_type='text/markdown',
     url='',  
   author='Francis W. Onyango',
