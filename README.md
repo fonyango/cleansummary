@@ -43,7 +43,7 @@ cs.check_skewness('variable_name')`
 
 # get statistical summary
 
-cs.get_statistical_summary(variableType=None)
+`cs.get_statistical_summary(variableType=None)`
 
 cs.get_statistical_summary(variableType='categorical')
 
@@ -51,13 +51,13 @@ cs.get_statistical_summary(variableType='numerical')
 ```
 ## Contributing
 
-We welcome contributions from the community. If you would like to contribute to this project, please follow these steps:
+If you would like to contribute to this project, please follow these steps:
 
 - Fork the repository on GitHub.
 
 - Clone the forked repository to your local machine.
 
-- Create a new branch for your feature or bug fix: git checkout -b feature-name
+- Create a new branch for your feature or bug fix: `git checkout -b feature-name`
 
 - Make your changes and commit them with descriptive commit messages.
 
