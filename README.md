@@ -4,7 +4,7 @@
 [![PyPI Version](https://img.shields.io/pypi/v/cleansummary)](https://pypi.org/project/cleansummary/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/cleansummary)](https://pypi.org/project/cleansummary/)
 
-This is a simple package for exploring pandas dataframe to get the initial statistical summary.
+This is a simple python package for exploring pandas dataframe to get the initial statistical summary.
 
 ## Table of Contents
 
