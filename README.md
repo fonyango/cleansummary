@@ -15,13 +15,15 @@ This is a simple package for exploring pandas dataframe to get the initial stati
 
 ## Installation
 
+Use pip directly
+
 `pip install cleansummary`
 
 Or install from source
 
 ```
-git clone https://github.com/yourusername/your-package-name.git
-cd your-package-name
+git clone https://github.com/fonyango/cleansummary.git
+cd cleansummary
 pip install .
 ```
 
@@ -51,12 +53,17 @@ cs.get_statistical_summary(variableType='numerical')
 
 We welcome contributions from the community. If you would like to contribute to this project, please follow these steps:
 
-Fork the repository on GitHub.
-Clone the forked repository to your local machine.
-Create a new branch for your feature or bug fix: git checkout -b feature-name
-Make your changes and commit them with descriptive commit messages.
-Push your changes to your fork on GitHub: git push origin feature-name
-Create a pull request from your forked repository to this repository.
+- Fork the repository on GitHub.
+
+- Clone the forked repository to your local machine.
+
+- Create a new branch for your feature or bug fix: git checkout -b feature-name
+
+- Make your changes and commit them with descriptive commit messages.
+
+- Push your changes to your fork on GitHub: git push origin feature-name
+
+- Create a pull request from your forked repository to this repository.
 
 ## License
 
