@@ -4,6 +4,7 @@ MANIFEST.in
 README.md
 license.txt
 setup.py
+test_clean_summary.py
 cleansummary/__init__.py
 cleansummary.egg-info/PKG-INFO
 cleansummary.egg-info/SOURCES.txt

@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: cleansummary
-Version: 0.0.4
+Version: 0.0.5
 Summary: A simple package to get statistical summary of a pandas dataframe
 Home-page: UNKNOWN
 Author: Francis W. Onyango

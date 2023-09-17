@@ -1,165 +1,161 @@
-
 import pandas as pd
 import numpy as np
-from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
-from scipy.stats import zscore
-import scipy.stats as stats
+from scipy.stats import zscore, shapiro
 
-
-# Clean Summary class
 class CleanSummary():
     
-    def __init__(self,data):
+    def __init__(self, data):
+        """
+        Initialize the CleanSummary class with a DataFrame.
+
+        Parameters:
+        data (DataFrame): The input DataFrame to be analyzed.
+
+        Raises:
+        ValueError: If the input DataFrame is empty.
+        """
+        if data.empty:
+            raise ValueError("Dataframe is empty")
         
         self.data = data
-    
-    def percentage_missing(self):
         
-        """Get summary of missing values in the data
+    def plot_histogram(self, variable):
         """
-        missing = pd.DataFrame(self.data.isnull().sum().reset_index().values, 
-                               columns=['variable','missing'])
-        missing['%_missing'] = missing['missing']/len(self.data) * 100
-        d_types = pd.DataFrame(self.data.dtypes).reset_index()
-        d_types.columns = ['variable', 'dtype']
-        result = missing.merge(d_types, on='variable')
+        Generate and display a histogram for a given variable.
 
-        return result
+        Parameters:
+        variable (str): The name of the variable to visualize.
 
-
-    def check_skewness(self, variable):
-        
-        """Check skewness of a variables
+        Returns:
+        None
         """
-
-        # calculate skewness
-        print("Skewness coefficient: ", self.data[variable].skew())
-
-        # Plot histogram
-        plt.figure(figsize=(12,5))
+        plt.figure(figsize=(12, 5))
         plt.hist(self.data[variable], bins='auto', alpha=0.7, rwidth=0.85)
         plt.grid(axis='y', alpha=0.75)
-        plt.xlabel('Value',color='blue',fontsize=11)
-        plt.ylabel('Frequency',color='blue',fontsize=11)
-        plt.title(f'Distribution of {variable}', fontdict={"size":12, "color":"blue"})
-        
-        # add thousand separator to y-axis labels
+        plt.xlabel('Value', color='blue', fontsize=11)
+        plt.ylabel('Frequency', color='blue', fontsize=11)
+        plt.title(f'Distribution of {variable}', fontdict={"size": 12, "color": "blue"})
         plt.gca().yaxis.set_major_formatter(mticker.StrMethodFormatter('{x:,.0f}'))
         plt.gca().xaxis.set_major_formatter(mticker.StrMethodFormatter('{x:,.0f}'))
-
         plt.xticks(rotation=0)
         plt.grid(True)
         plt.tick_params(axis='x', which='both', labelsize=9, labelcolor='blue')
         plt.tick_params(axis='y', which='both', labelsize=9, labelcolor='blue')
         plt.show()
-
-
-    def get_statistical_summary(self, variableType=None):
         
+    def check_skewness(self, variable):
         """
-        Get statistical summary of numerical varaibles the dataframe"""
-                   
-        # missing values and data types
+        Calculate and display the skewness coefficient for a given variable.
+
+        Parameters:
+        variable (str): The name of the variable to analyze.
+
+        Returns:
+        A plot
+        """
+        skewness_coeficient = self.data[variable].skew()
+        print("Skewness coefficient: ", round(skewness_coeficient,4))
+        return self.plot_histogram(variable)
+
+    def percentage_missing(self):
+        """
+        Calculate the percentage of missing values for each column in the DataFrame.
+
+        Returns:
+        DataFrame: A DataFrame containing columns 'variable', 'missing', and '%_missing'.
+        """
+        missing = self.data.isnull().sum().reset_index()
+        missing.columns = ['variable', 'missing']
+        missing['%_missing'] = missing['missing'] / len(self.data) * 100
         d_types = pd.DataFrame(self.data.dtypes).reset_index()
         d_types.columns = ['variable', 'dtype']
+        result = missing.merge(d_types, on='variable')
+        return result
+
+    def get_statistical_summary(self, variableType=None):
+        """
+        Generate a statistical summary of the DataFrame.
+
+        Parameters:
+        variableType (str, optional): Type of variables to include in the summary ('numerical', 'categorical', or None).
+
+        Returns:
+        DataFrame: A DataFrame containing the statistical summary.
+        """
+        if self.data.empty:
+            raise ValueError("Dataframe is empty")
         
-        missing = pd.DataFrame(self.data.isnull().sum().reset_index().values, columns=['variable','missing'])
-        missing['%_missing'] = missing['missing']/len(self.data) * 100
-        d_types_df = pd.DataFrame(self.data.dtypes).reset_index()
-        d_types_df.columns = ['variable', 'dtype']
-        
-        # mapping of data types to human-readable text
         data_type_mapping = {
-                                np.dtype('O'): 'Text',
-                                np.dtype('int64'): 'Integer',
-                                np.dtype('float64'): 'Float',
-                                np.dtype('<M8[ns]'): 'Date/Time'
-                            }
-        # Convert 'dtype' values to human-readable text
-        d_types_df['dtype'] = d_types_df['dtype'].map(data_type_mapping)
+            np.dtype('O'): 'Text',
+            np.dtype('int64'): 'Integer',
+            np.dtype('float64'): 'Float',
+            np.dtype('<M8[ns]'): 'Date/Time',
+            np.dtype('bool'): 'Boolean'
+        }
         
-        missing = d_types_df.merge(missing, on='variable')
-     
-        # descriptive statistics
-        summary_statistics = self.data.describe(include="all").T.reset_index().rename(columns={'index':'variable'})
-
-        # calculate unique values in each column
-        unique_values = {col: self.data[col].nunique() for col in summary_statistics['variable'].unique()}
-        unique_df = pd.DataFrame.from_dict(unique_values, orient='index', 
-                        columns=['num_unique']).reset_index().rename(columns={'index':"variable"})
-        
-        # median
-        median_values = {col: self.data[col].median() for col in summary_statistics['variable'].unique() 
-                         if self.data[col].dtype!='object'}
-        median_df = pd.DataFrame.from_dict(median_values, orient='index', 
-                        columns=['median']).reset_index().rename(columns={'index':"variable"})
-
-        # mode
-        modal_values = {}
-        for col in summary_statistics['variable'].unique():
+        def get_modal_values(col):
             modes = self.data[col].mode()
-            if not modes.empty:
-                modal_values[col] = modes.iat[0]
-            else:
-                modal_values[col] = None
-                
-        modal_df = pd.DataFrame.from_dict(modal_values, orient='index', 
-                        columns=['mode']).reset_index().rename(columns={'index': 'variable'})
-
-        # skewness
-        skewness_values = {col: self.data[col].skew() for col in summary_statistics['variable'].unique() 
-                           if self.data[col].dtype not in ['object','datetime64[ns]']}
-        skewness_df = pd.DataFrame.from_dict(skewness_values, orient='index', 
-                        columns=['skewness']).reset_index().rename(columns={'index':"variable"})
-
-        # number of outliers
-        outliers_df = pd.DataFrame(columns=["variable","num_outliers"])
-        cols = summary_statistics['variable'].unique()
-        for col in cols:
-            if self.data[col].dtype in ['object','datetime64[ns]']:
-                num_outliers=None
-            else:
-                z_scores = zscore(self.data[col])
-                num_outliers = (abs(z_scores) > 3).sum()
-                
-            outliers_df = outliers_df.append({'variable': col, 'num_outliers': num_outliers},ignore_index=True)
-       
-        # check for normality using Shapiro wilk test
-        normality_df = pd.DataFrame(columns=["variable","statistic","pValue"])
-        for col in self.data.columns:
-            if self.data[col].dtype not in ['object','datetime64[ns]']:
-            
-                stat, p = stats.shapiro(self.data[col])
-                normality_df = normality_df.append({"variable":col,"statistic":stat,"pValue":p}, ignore_index=True)
-                
-        # if p_value > 0.05, then the distribution is normal
-        normality_df['normality'] = np.where(normality_df['pValue']>0.05,True,False)
-        normality_df.drop(columns=['statistic','pValue'], inplace=True)
-    
-        # summary
-        summary_statistics = missing.merge(summary_statistics, on='variable')
-        summary_statistics = summary_statistics.merge(unique_df, on='variable')
-        summary_statistics = summary_statistics.merge(median_df, on='variable',how='left')
-        summary_statistics = summary_statistics.merge(modal_df, on='variable',how='left')
-        summary_statistics = summary_statistics.merge(skewness_df, on='variable', how='left')
-        summary_statistics = summary_statistics.merge(outliers_df, on='variable',how='left')
-        summary_statistics = summary_statistics.merge(normality_df, on='variable',how='left')
+            return modes.iat[0] if not modes.empty else None
         
-        summary_statistics.drop(columns=['unique','top','freq'],inplace=True)
+        summary_statistics = self.data.describe(include="all").T.reset_index().rename(
+            columns={'index': 'variable'})
+
+        summary_statistics['dtype'] = summary_statistics['variable'].apply(lambda col: data_type_mapping.get(self.data[col].dtype, None))
+        
+        summary_statistics['%_missing'] = (self.data.isnull().sum() / len(self.data) * 100).values
+        summary_statistics['num_unique'] = self.data.nunique().values
+        summary_statistics['mode'] = summary_statistics['variable'].apply(get_modal_values)
     
-        if variableType=='numerical':
-            result = summary_statistics[summary_statistics['dtype'].isin(['Integer','Float'])]
+        numerical_columns = self.data.select_dtypes(include=['int64', 'float64']).columns
+
+        median_values = {col: self.data[col].median() for col in numerical_columns}
+        summary_statistics['median'] = summary_statistics['variable'].map(median_values)
+
+        skewness_values = {col: self.data[col].skew() for col in numerical_columns}
+        summary_statistics['skewness_coefficient'] = summary_statistics['variable'].map(skewness_values)
+
+        STDEV_THRESHOLD = 3
+
+        def count_outliers(col):
+            if self.data[col].dtype in ['object', 'datetime64[ns]']:
+                return None
+            z_scores = zscore(self.data[col])
+            return (abs(z_scores) > STDEV_THRESHOLD).sum()
+
+        summary_statistics['num_outliers'] = summary_statistics['variable'].apply(count_outliers)
+
+        SIGNIFICANCE_LEVEL = 0.05
+
+        def check_normality(col):
+            if self.data[col].dtype not in ['object', 'datetime64[ns]']:
+                stat, p = shapiro(self.data[col])
+                return p > SIGNIFICANCE_LEVEL
+            return False
+
+        summary_statistics['normality'] = summary_statistics['variable'].apply(check_normality)
+
+        summary_statistics.drop(columns=['unique', 'top', 'freq'], inplace=True)
+
+        if variableType == 'numerical':
+            result = summary_statistics[summary_statistics['dtype'].isin(['Integer', 'Float'])]
             result.dropna(axis=1, inplace=True)
-            
-        elif variableType=='categorical':
-            result = summary_statistics[summary_statistics['dtype'].isin(['Text','Date/Time'])]
-            columns_to_drop = ['mean','std','min','25%','50%','75%','max',
-                              'median','skewness','num_outliers','normality'] 
+
+        elif variableType == 'categorical':
+            result = summary_statistics[summary_statistics['dtype'].isin(['Text', 'Date/Time', 'Boolean'])]
+            columns_to_drop = ['mean', 'std', 'min', '25%', '50%', '75%', 'max',
+                               'median', 'skewness_coefficient', 'num_outliers', 'normality']
             result.drop(columns=columns_to_drop, inplace=True)
-            
+
         else:
             result = summary_statistics
+            
+        numeric_columns = ['mean', 'std', 'min', '25%', '50%', '75%', 'max',
+                            'median', 'skewness_coefficient']
         
+        for col in numeric_columns:
+            if col in result.columns:
+                result[col] = result[col].apply(lambda x: round(float(x), 4))
+
         return result
