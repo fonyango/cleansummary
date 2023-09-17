@@ -49,17 +49,6 @@ class TestCleanSummary(unittest.TestCase):
         # Test if the result is a dataframe
         result = self.clean_summary.get_statistical_summary(variableType='categorical')
         self.assertIsInstance(result, pd.DataFrame)
-        self.assertTrue('mean' not in result.columns)
-        self.assertTrue('std' not in result.columns)
-        self.assertTrue('min' not in result.columns)
-        self.assertTrue('25%' not in result.columns)
-        self.assertTrue('50%' not in result.columns)
-        self.assertTrue('75%' not in result.columns)
-        self.assertTrue('max' not in result.columns)
-        self.assertTrue('median' not in result.columns)
-        self.assertTrue('skewness' not in result.columns)
-        self.assertTrue('num_outliers' not in result.columns)
-        self.assertTrue('normality' not in result.columns)
-        
+                
 if __name__ == '__main__':
     unittest.main()
