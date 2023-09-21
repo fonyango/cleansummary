@@ -12,7 +12,7 @@ class TestCleanSummary(unittest.TestCase):
 
     def setUp(self):
         '''
-        Create sample test data
+        Set the sample data and instantiate the module
         '''
         data = pd.DataFrame({
             'A': [1, 2, 3, 4, 5],
